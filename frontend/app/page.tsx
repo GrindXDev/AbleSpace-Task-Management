@@ -1,28 +1,35 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
-  createTask,
-  deleteTask,
-  getTasks,
-  updateTask,
   Task,
   TaskPriority,
   TaskStatus,
 } from "@/lib/api";
+
+import { useTasks } from "@/hooks/useTasks";
 
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 
 import TaskForm from "@/components/tasks/TaskForm";
 import TaskList from "@/components/tasks/TaskList";
-import TaskToolbar from "@/components/tasks/TaskToolbar";
 import TaskBoard from "@/components/tasks/TaskBoard";
+import TaskToolbar from "@/components/tasks/TaskToolbar";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const {
+    tasks,
+    loading,
+    error,
+    loadTasks,
+    createTask,
+    updateTask,
+    deleteTask,
+  } = useTasks();
+
+  // View state
+  const [view, setView] = useState<"list" | "board">("list");
 
   // Form state
   const [title, setTitle] = useState("");
@@ -31,10 +38,7 @@ export default function Home() {
   const [priority, setPriority] = useState<TaskPriority>("medium");
   const [dueDate, setDueDate] = useState("");
 
-  // View state
-  const [view, setView] = useState<"list" | "board">("list");
-
-  // Loading state
+  // Form loading state
   const [creating, setCreating] = useState(false);
   const [updating, setUpdating] = useState(false);
 
@@ -43,24 +47,6 @@ export default function Home() {
 
   // Form visibility
   const [showTaskForm, setShowTaskForm] = useState(false);
-
-  async function loadTasks() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const data = await getTasks();
-      setTasks(data);
-    } catch {
-      setError("Unable to load tasks.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadTasks();
-  }, []);
 
   function resetForm() {
     setTitle("");
@@ -88,52 +74,32 @@ export default function Home() {
       return;
     }
 
-    try {
-      setError("");
+    const taskData = {
+      title: title.trim(),
+      description: description.trim() || undefined,
+      status,
+      priority,
+      dueDate: dueDate || undefined,
+    };
 
+    try {
       if (editingTaskId) {
-        // UPDATE
         setUpdating(true);
 
-        const updatedTask = await updateTask(editingTaskId, {
-          title: title.trim(),
-          description: description.trim() || undefined,
-          status,
-          priority,
-          dueDate: dueDate || undefined,
-        });
-
-        setTasks((currentTasks) =>
-          currentTasks.map((task) =>
-            task._id === editingTaskId ? updatedTask : task,
-          ),
-        );
+        await updateTask(editingTaskId, taskData);
 
         resetForm();
         setShowTaskForm(false);
       } else {
-        // CREATE
         setCreating(true);
 
-        const newTask = await createTask({
-          title: title.trim(),
-          description: description.trim() || undefined,
-          status,
-          priority,
-          dueDate: dueDate || undefined,
-        });
-
-        setTasks((currentTasks) => [newTask, ...currentTasks]);
+        await createTask(taskData);
 
         resetForm();
         setShowTaskForm(false);
       }
     } catch {
-      setError(
-        editingTaskId
-          ? "Unable to update task."
-          : "Unable to create task.",
-      );
+      // Error is already handled inside useTasks
     } finally {
       setCreating(false);
       setUpdating(false);
@@ -171,19 +137,13 @@ export default function Home() {
     }
 
     try {
-      setError("");
-
       await deleteTask(id);
-
-      setTasks((currentTasks) =>
-        currentTasks.filter((task) => task._id !== id),
-      );
 
       if (editingTaskId === id) {
         handleCancelForm();
       }
     } catch {
-      setError("Unable to delete task.");
+      // Error is already handled inside useTasks
     }
   }
 
@@ -234,7 +194,7 @@ export default function Home() {
               />
             )}
 
-            {/* Task List */}
+            {/* Tasks */}
             <section className={showTaskForm ? "" : "lg:col-span-2"}>
               <div className="mb-4 flex items-center justify-between">
                 <div>
