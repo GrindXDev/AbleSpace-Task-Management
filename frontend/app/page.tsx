@@ -11,6 +11,9 @@ import {
   TaskStatus,
 } from "@/lib/api";
 
+import Sidebar from "@/components/layout/Sidebar";
+import Header from "@/components/layout/Header";
+
 import TaskForm from "@/components/tasks/TaskForm";
 import TaskList from "@/components/tasks/TaskList";
 
@@ -160,36 +163,13 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-7xl px-6 py-10">
+  <div className="flex min-h-screen bg-slate-50">
+    <Sidebar />
 
-        {/* Header */}
-        <header className="mb-8">
-          <p className="mb-2 text-sm font-medium text-slate-500">
-            Task Management
-          </p>
+    <main className="min-w-0 flex-1">
+      <Header onRefresh={loadTasks} />
 
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-                My Tasks
-              </h1>
-
-              <p className="mt-1 text-slate-500">
-                Create, manage and track your tasks.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={loadTasks}
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
-            >
-              Refresh
-            </button>
-          </div>
-        </header>
-
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {/* Error */}
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -198,7 +178,6 @@ export default function Home() {
         )}
 
         <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
-
           {/* Task Form */}
           <TaskForm
             editingTaskId={editingTaskId}
@@ -243,5 +222,6 @@ export default function Home() {
         </div>
       </div>
     </main>
+  </div>
   );
 }
