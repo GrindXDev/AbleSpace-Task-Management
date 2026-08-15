@@ -16,6 +16,8 @@ import Header from "@/components/layout/Header";
 
 import TaskForm from "@/components/tasks/TaskForm";
 import TaskList from "@/components/tasks/TaskList";
+import TaskToolbar from "@/components/tasks/TaskToolbar";
+import TaskBoard from "@/components/tasks/TaskBoard";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -29,11 +31,18 @@ export default function Home() {
   const [priority, setPriority] = useState<TaskPriority>("medium");
   const [dueDate, setDueDate] = useState("");
 
+  // View state
+  const [view, setView] = useState<"list" | "board">("list");
+
+  // Loading state
   const [creating, setCreating] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   // Edit state
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const [updating, setUpdating] = useState(false);
+
+  // Form visibility
+  const [showTaskForm, setShowTaskForm] = useState(false);
 
   async function loadTasks() {
     try {
@@ -62,6 +71,16 @@ export default function Home() {
     setEditingTaskId(null);
   }
 
+  function handleAddTask() {
+    resetForm();
+    setShowTaskForm(true);
+  }
+
+  function handleCancelForm() {
+    resetForm();
+    setShowTaskForm(false);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -73,6 +92,7 @@ export default function Home() {
       setError("");
 
       if (editingTaskId) {
+        // UPDATE
         setUpdating(true);
 
         const updatedTask = await updateTask(editingTaskId, {
@@ -90,7 +110,9 @@ export default function Home() {
         );
 
         resetForm();
+        setShowTaskForm(false);
       } else {
+        // CREATE
         setCreating(true);
 
         const newTask = await createTask({
@@ -104,6 +126,7 @@ export default function Home() {
         setTasks((currentTasks) => [newTask, ...currentTasks]);
 
         resetForm();
+        setShowTaskForm(false);
       }
     } catch {
       setError(
@@ -130,6 +153,8 @@ export default function Home() {
       setDueDate("");
     }
 
+    setShowTaskForm(true);
+
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -155,7 +180,7 @@ export default function Home() {
       );
 
       if (editingTaskId === id) {
-        resetForm();
+        handleCancelForm();
       }
     } catch {
       setError("Unable to delete task.");
@@ -163,65 +188,86 @@ export default function Home() {
   }
 
   return (
-  <div className="flex min-h-screen bg-slate-50">
-    <Sidebar />
+    <div className="flex min-h-screen bg-slate-50">
+      {/* Sidebar */}
+      <Sidebar />
 
-    <main className="min-w-0 flex-1">
-      <Header onRefresh={loadTasks} />
+      {/* Main */}
+      <main className="min-w-0 flex-1">
+        {/* Header */}
+        <Header onRefresh={loadTasks} />
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
-        {/* Error */}
-        {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
+        {/* Toolbar */}
+        <TaskToolbar
+          view={view}
+          onViewChange={setView}
+          onAddTask={handleAddTask}
+        />
 
-        <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
-          {/* Task Form */}
-          <TaskForm
-            editingTaskId={editingTaskId}
-            title={title}
-            description={description}
-            status={status}
-            priority={priority}
-            dueDate={dueDate}
-            creating={creating}
-            updating={updating}
-            setTitle={setTitle}
-            setDescription={setDescription}
-            setStatus={setStatus}
-            setPriority={setPriority}
-            setDueDate={setDueDate}
-            onSubmit={handleSubmit}
-            onCancel={resetForm}
-          />
-
-          {/* Task List */}
-          <section>
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">
-                  Tasks
-                </h2>
-
-                <p className="text-sm text-slate-500">
-                  {tasks.length}{" "}
-                  {tasks.length === 1 ? "task" : "tasks"}
-                </p>
-              </div>
+        <div className="mx-auto max-w-7xl px-6 py-8">
+          {/* Error */}
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {error}
             </div>
+          )}
 
-            <TaskList
-              tasks={tasks}
-              loading={loading}
-              onEdit={handleEdit}
-              onDelete={handleDeleteTask}
-            />
-          </section>
+          <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
+            {/* Task Form */}
+            {showTaskForm && (
+              <TaskForm
+                editingTaskId={editingTaskId}
+                title={title}
+                description={description}
+                status={status}
+                priority={priority}
+                dueDate={dueDate}
+                creating={creating}
+                updating={updating}
+                setTitle={setTitle}
+                setDescription={setDescription}
+                setStatus={setStatus}
+                setPriority={setPriority}
+                setDueDate={setDueDate}
+                onSubmit={handleSubmit}
+                onCancel={handleCancelForm}
+              />
+            )}
+
+            {/* Task List */}
+            <section className={showTaskForm ? "" : "lg:col-span-2"}>
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900">
+                    Tasks
+                  </h2>
+
+                  <p className="text-sm text-slate-500">
+                    {tasks.length}{" "}
+                    {tasks.length === 1 ? "task" : "tasks"}
+                  </p>
+                </div>
+              </div>
+
+              {view === "list" ? (
+                <TaskList
+                  tasks={tasks}
+                  loading={loading}
+                  onEdit={handleEdit}
+                  onDelete={handleDeleteTask}
+                />
+              ) : (
+                <TaskBoard
+                  tasks={tasks}
+                  loading={loading}
+                  onEdit={handleEdit}
+                  onDelete={handleDeleteTask}
+                />
+              )}
+            </section>
+          </div>
         </div>
-      </div>
-    </main>
-  </div>
+      </main>
+    </div>
   );
 }
