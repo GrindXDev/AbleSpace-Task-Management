@@ -164,7 +164,7 @@ export default function Home() {
           onAddTask={handleAddTask}
         />
 
-        <div className="mx-auto max-w-7xl px-6 py-8">
+        <div className="mx-auto max-w-7xl px-6 py-6">
           {/* Error */}
           {error && (
             <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -172,7 +172,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
+          <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
             {/* Task Form */}
             {showTaskForm && (
               <TaskForm
@@ -196,7 +196,7 @@ export default function Home() {
 
             {/* Tasks */}
             <section className={showTaskForm ? "" : "lg:col-span-2"}>
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-5 flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-slate-900">
                     Tasks
