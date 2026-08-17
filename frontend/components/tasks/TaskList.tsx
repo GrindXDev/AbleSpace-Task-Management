@@ -16,30 +16,54 @@ export default function TaskList({
   onEdit,
   onDelete,
 }: TaskListProps) {
+  // Loading state
   if (loading) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
-        Loading tasks...
-      </div>
+      <section className="space-y-3">
+        {[1, 2, 3].map((item) => (
+          <div
+            key={item}
+            className="animate-pulse rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div className="h-4 w-2/3 rounded bg-slate-200" />
+
+            <div className="mt-3 h-3 w-full rounded bg-slate-100" />
+
+            <div className="mt-2 h-3 w-1/2 rounded bg-slate-100" />
+
+            <div className="mt-5 flex gap-2">
+              <div className="h-6 w-20 rounded-full bg-slate-100" />
+              <div className="h-6 w-24 rounded-full bg-slate-100" />
+            </div>
+          </div>
+        ))}
+      </section>
     );
   }
 
+  // Empty state
   if (tasks.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
-        <h3 className="font-medium text-slate-900">
+      <section className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm sm:p-12">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100">
+          <span className="text-xl text-slate-500">✓</span>
+        </div>
+
+        <h3 className="mt-4 text-base font-semibold text-slate-900">
           No tasks yet
         </h3>
 
-        <p className="mt-1 text-sm text-slate-500">
-          Create your first task using the form.
+        <p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-slate-500">
+          You don't have any tasks yet. Create your first task using the form
+          to get started.
         </p>
-      </div>
+      </section>
     );
   }
 
+  // Task list
   return (
-    <div className="space-y-3">
+    <section className="space-y-3">
       {tasks.map((task) => (
         <TaskCard
           key={task._id}
@@ -48,6 +72,6 @@ export default function TaskList({
           onDelete={onDelete}
         />
       ))}
-    </div>
+    </section>
   );
 }
