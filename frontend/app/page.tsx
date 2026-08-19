@@ -1,11 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import {
-  Task,
-  TaskPriority,
-  TaskStatus,
-} from "@/lib/api";
+import { Task, TaskPriority, TaskStatus } from "@/lib/api";
 
 import { useTasks } from "@/hooks/useTasks";
 
@@ -28,24 +24,24 @@ export default function Home() {
     deleteTask,
   } = useTasks();
 
-  // View state
   const [view, setView] = useState<"list" | "board">("list");
 
-  // Form state
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<TaskStatus>("todo");
   const [priority, setPriority] = useState<TaskPriority>("medium");
   const [dueDate, setDueDate] = useState("");
 
-  // Form loading state
+  
   const [creating, setCreating] = useState(false);
   const [updating, setUpdating] = useState(false);
 
-  // Edit state
+  
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
-  // Form visibility
+  
   const [showTaskForm, setShowTaskForm] = useState(false);
 
   function resetForm() {
@@ -147,25 +143,40 @@ export default function Home() {
     }
   }
 
+  
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+
+  const filteredTasks = tasks.filter((task) => {
+    if (!normalizedSearch) {
+      return true;
+    }
+
+    return (
+      task.title.toLowerCase().includes(normalizedSearch) ||
+      (task.description ?? "").toLowerCase().includes(normalizedSearch)
+    );
+  });
+
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar */}
+      
       <Sidebar />
 
-      {/* Main */}
+      
       <main className="min-w-0 flex-1">
-        {/* Header */}
+        
         <Header onRefresh={loadTasks} />
 
-        {/* Toolbar */}
         <TaskToolbar
           view={view}
           onViewChange={setView}
           onAddTask={handleAddTask}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
         />
 
         <div className="mx-auto max-w-7xl px-6 py-6">
-          {/* Error */}
+          
           {error && (
             <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
@@ -173,7 +184,7 @@ export default function Home() {
           )}
 
           <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-            {/* Task Form */}
+            
             {showTaskForm && (
               <TaskForm
                 editingTaskId={editingTaskId}
@@ -203,22 +214,24 @@ export default function Home() {
                   </h2>
 
                   <p className="text-sm text-slate-500">
-                    {tasks.length}{" "}
-                    {tasks.length === 1 ? "task" : "tasks"}
+                    {filteredTasks.length}{" "}
+                    {filteredTasks.length === 1 ? "task" : "tasks"}
+                    {searchQuery.trim() &&
+                      ` found out of ${tasks.length}`}
                   </p>
                 </div>
               </div>
 
               {view === "list" ? (
                 <TaskList
-                  tasks={tasks}
+                  tasks={filteredTasks}
                   loading={loading}
                   onEdit={handleEdit}
                   onDelete={handleDeleteTask}
                 />
               ) : (
                 <TaskBoard
-                  tasks={tasks}
+                  tasks={filteredTasks}
                   loading={loading}
                   onEdit={handleEdit}
                   onDelete={handleDeleteTask}
