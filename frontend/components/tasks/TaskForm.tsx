@@ -69,9 +69,9 @@ export default function TaskForm({
         </div>
       </div>
 
-      {/* Form */}
+      
       <form onSubmit={onSubmit} className="mt-6 space-y-5">
-        {/* Title */}
+        
         <div>
           <label
             htmlFor="title"
@@ -91,7 +91,7 @@ export default function TaskForm({
           />
         </div>
 
-        {/* Description */}
+        
         <div>
           <label
             htmlFor="description"
@@ -117,7 +117,7 @@ export default function TaskForm({
           </div>
         </div>
 
-        {/* Status + Priority */}
+        
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label
@@ -164,7 +164,7 @@ export default function TaskForm({
           </div>
         </div>
 
-        {/* Due Date */}
+        
         <div>
           <label
             htmlFor="dueDate"
@@ -182,7 +182,7 @@ export default function TaskForm({
           />
         </div>
 
-        {/* Actions */}
+        
         <div className="space-y-2.5 pt-1">
           <button
             type="submit"
