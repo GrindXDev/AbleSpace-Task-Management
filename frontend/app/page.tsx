@@ -2,6 +2,10 @@
 
 import { FormEvent, useState } from "react";
 import { Task, TaskPriority, TaskStatus } from "@/lib/api";
+import {
+  defaultVisibleTaskFields,
+  type VisibleTaskFields,
+} from "@/lib/task-fields";
 
 import { useTasks } from "@/hooks/useTasks";
 
@@ -36,6 +40,10 @@ export default function Home() {
     TaskPriority | "all"
   >("all");
 
+  
+  const [visibleFields, setVisibleFields] =
+    useState<VisibleTaskFields>(defaultVisibleTaskFields);
+
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -53,7 +61,6 @@ export default function Home() {
     string | null
   >(null);
 
-  
   const [showTaskForm, setShowTaskForm] = useState(false);
 
   function resetForm() {
@@ -73,6 +80,13 @@ export default function Home() {
   function handleCancelForm() {
     resetForm();
     setShowTaskForm(false);
+  }
+
+  function handleFieldToggle(field: keyof VisibleTaskFields) {
+    setVisibleFields((currentFields) => ({
+      ...currentFields,
+      [field]: !currentFields[field],
+    }));
   }
 
   async function handleSubmit(
@@ -200,6 +214,8 @@ export default function Home() {
           onStatusFilterChange={setStatusFilter}
           priorityFilter={priorityFilter}
           onPriorityFilterChange={setPriorityFilter}
+          visibleFields={visibleFields}
+          onFieldToggle={handleFieldToggle}
         />
 
         <div className="mx-auto max-w-7xl px-6 py-6">
@@ -231,8 +247,8 @@ export default function Home() {
                 onCancel={handleCancelForm}
               />
             )}
-
-          
+            
+            
             <section
               className={
                 showTaskForm ? "" : "lg:col-span-2"
@@ -264,6 +280,7 @@ export default function Home() {
                   loading={loading}
                   onEdit={handleEdit}
                   onDelete={handleDeleteTask}
+                  visibleFields={visibleFields}
                 />
               ) : (
                 <TaskBoard
@@ -271,6 +288,7 @@ export default function Home() {
                   loading={loading}
                   onEdit={handleEdit}
                   onDelete={handleDeleteTask}
+                  visibleFields={visibleFields}
                 />
               )}
             </section>

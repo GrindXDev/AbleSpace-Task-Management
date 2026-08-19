@@ -1,6 +1,7 @@
 "use client";
 
 import { Task } from "@/lib/api";
+import type { VisibleTaskFields } from "@/lib/task-fields";
 import TaskCard from "./TaskCard";
 
 interface TaskListProps {
@@ -8,6 +9,7 @@ interface TaskListProps {
   loading: boolean;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
+  visibleFields: VisibleTaskFields;
 }
 
 export default function TaskList({
@@ -15,6 +17,7 @@ export default function TaskList({
   loading,
   onEdit,
   onDelete,
+  visibleFields,
 }: TaskListProps) {
   // Loading state
   if (loading) {
@@ -50,12 +53,11 @@ export default function TaskList({
         </div>
 
         <h3 className="mt-4 text-base font-semibold text-slate-900">
-          No tasks yet
+          No tasks found 
         </h3>
 
         <p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-slate-500">
-          You don't have any tasks yet. Create your first task using the form
-          to get started.
+          No tasks match your current search or filters.
         </p>
       </section>
     );
@@ -70,6 +72,7 @@ export default function TaskList({
           task={task}
           onEdit={onEdit}
           onDelete={onDelete}
+          visibleFields={visibleFields}
         />
       ))}
     </section>

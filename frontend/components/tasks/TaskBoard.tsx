@@ -1,6 +1,7 @@
 "use client";
 
 import { Task, TaskStatus } from "@/lib/api";
+import type { VisibleTaskFields } from "@/lib/task-fields";
 import TaskCard from "@/components/tasks/TaskCard";
 
 interface TaskBoardProps {
@@ -8,6 +9,7 @@ interface TaskBoardProps {
   loading: boolean;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
+  visibleFields: VisibleTaskFields;
 }
 
 const columns: {
@@ -45,6 +47,7 @@ export default function TaskBoard({
   loading,
   onEdit,
   onDelete,
+  visibleFields,
 }: TaskBoardProps) {
   if (loading) {
     return (
@@ -94,7 +97,7 @@ export default function TaskBoard({
             key={column.status}
             className={`min-h-[400px] rounded-2xl border p-4 transition-colors ${columnStyles[column.status]}`}
           >
-            {/* Column Header */}
+          
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <h2 className="text-sm font-semibold text-slate-800">
@@ -109,7 +112,7 @@ export default function TaskBoard({
               </div>
             </div>
 
-            {/* Column Tasks */}
+            
             <div className="space-y-3">
               {columnTasks.length === 0 ? (
                 <div className="flex min-h-28 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white/70 px-4 text-center">
@@ -124,6 +127,7 @@ export default function TaskBoard({
                     task={task}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    visibleFields={visibleFields}
                   />
                 ))
               )}
