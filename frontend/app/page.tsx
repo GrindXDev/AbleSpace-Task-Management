@@ -28,10 +28,20 @@ export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [statusFilter, setStatusFilter] = useState<
+    TaskStatus | "all"
+  >("all");
+
+  const [priorityFilter, setPriorityFilter] = useState<
+    TaskPriority | "all"
+  >("all");
+
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<TaskStatus>("todo");
-  const [priority, setPriority] = useState<TaskPriority>("medium");
+  const [priority, setPriority] =
+    useState<TaskPriority>("medium");
   const [dueDate, setDueDate] = useState("");
 
   
@@ -39,7 +49,9 @@ export default function Home() {
   const [updating, setUpdating] = useState(false);
 
   
-  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<
+    string | null
+  >(null);
 
   
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -63,7 +75,9 @@ export default function Home() {
     setShowTaskForm(false);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
     if (!title.trim()) {
@@ -143,26 +157,35 @@ export default function Home() {
     }
   }
 
-  
+  // Apply search and filters together
   const normalizedSearch = searchQuery.trim().toLowerCase();
 
   const filteredTasks = tasks.filter((task) => {
-    if (!normalizedSearch) {
-      return true;
-    }
+    const matchesSearch =
+      !normalizedSearch ||
+      task.title.toLowerCase().includes(normalizedSearch) ||
+      (task.description ?? "")
+        .toLowerCase()
+        .includes(normalizedSearch);
+
+    const matchesStatus =
+      statusFilter === "all" || task.status === statusFilter;
+
+    const matchesPriority =
+      priorityFilter === "all" ||
+      task.priority === priorityFilter;
 
     return (
-      task.title.toLowerCase().includes(normalizedSearch) ||
-      (task.description ?? "").toLowerCase().includes(normalizedSearch)
+      matchesSearch &&
+      matchesStatus &&
+      matchesPriority
     );
   });
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      
       <Sidebar />
 
-      
       <main className="min-w-0 flex-1">
         
         <Header onRefresh={loadTasks} />
@@ -173,6 +196,10 @@ export default function Home() {
           onAddTask={handleAddTask}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+          priorityFilter={priorityFilter}
+          onPriorityFilterChange={setPriorityFilter}
         />
 
         <div className="mx-auto max-w-7xl px-6 py-6">
@@ -205,8 +232,12 @@ export default function Home() {
               />
             )}
 
-            {/* Tasks */}
-            <section className={showTaskForm ? "" : "lg:col-span-2"}>
+          
+            <section
+              className={
+                showTaskForm ? "" : "lg:col-span-2"
+              }
+            >
               <div className="mb-5 flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-semibold text-slate-900">
@@ -215,8 +246,13 @@ export default function Home() {
 
                   <p className="text-sm text-slate-500">
                     {filteredTasks.length}{" "}
-                    {filteredTasks.length === 1 ? "task" : "tasks"}
-                    {searchQuery.trim() &&
+                    {filteredTasks.length === 1
+                      ? "task"
+                      : "tasks"}
+
+                    {(searchQuery.trim() ||
+                      statusFilter !== "all" ||
+                      priorityFilter !== "all") &&
                       ` found out of ${tasks.length}`}
                   </p>
                 </div>
