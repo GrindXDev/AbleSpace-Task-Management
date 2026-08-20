@@ -24,11 +24,11 @@ const fields: {
   key: ProjectField;
   label: string;
 }[] = [
-  { key: "priority", label: "Priority" },
-  { key: "lead", label: "Lead" },
-  { key: "dueDate", label: "Due Date" },
-  { key: "actions", label: "Actions" },
-];
+    { key: "priority", label: "Priority" },
+    { key: "lead", label: "Lead" },
+    { key: "dueDate", label: "Due Date" },
+    { key: "actions", label: "Actions" },
+  ];
 
 export default function ProjectToolbar({
   searchQuery,
@@ -63,8 +63,11 @@ export default function ProjectToolbar({
       </div>
 
       <div className="flex items-center gap-2">
-        {/* Fields menu */}
-        <details className="relative">
+
+        <details
+          name="project-toolbar-menu"
+          className="relative"
+        >
           <summary className="flex h-9 cursor-pointer list-none items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
             <span>▦</span>
             <span>Fields</span>
@@ -95,8 +98,11 @@ export default function ProjectToolbar({
           </div>
         </details>
 
-        {/* Filter menu */}
-        <details className="relative">
+
+        <details
+          name="project-toolbar-menu"
+          className="relative"
+        >
           <summary className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50">
             <span aria-label="Filter">▼</span>
           </summary>
@@ -120,11 +126,10 @@ export default function ProjectToolbar({
                 onClick={() =>
                   onPriorityChange(value)
                 }
-                className={`flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm transition ${
-                  priorityFilter === value
-                    ? "bg-slate-100 font-medium text-slate-900"
-                    : "text-slate-600 hover:bg-slate-50"
-                }`}
+                className={`flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm transition ${priorityFilter === value
+                  ? "bg-slate-100 font-medium text-slate-900"
+                  : "text-slate-600 hover:bg-slate-50"
+                  }`}
               >
                 <span>{label}</span>
 
