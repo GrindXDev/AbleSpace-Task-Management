@@ -53,6 +53,8 @@ The application allows users to create, update, delete, and organize tasks using
 AbleSpace-Task-Management/
 ├── frontend/
 │   ├── app/
+│   │   ├── login/
+│   │   │   └── page.tsx
 │   │   ├── profile/
 │   │   │   └── page.tsx
 │   │   ├── projects/
@@ -64,6 +66,8 @@ AbleSpace-Task-Management/
 │   │   └── page.tsx
 │   │
 │   ├── components/
+│   │   ├── auth/
+│   │   │   └── AuthGuard.tsx
 │   │   ├── layout/
 │   │   │   ├── Header.tsx
 │   │   │   └── Sidebar.tsx
@@ -80,6 +84,11 @@ AbleSpace-Task-Management/
 │   │   │   ├── AppearanceSettings.tsx
 │   │   │   └── ThemeInitializer.tsx
 │   │   ├── tasks/
+│   │   │   ├── toolbar/
+│   │   │   │   ├── FieldsControl.tsx
+│   │   │   │   ├── FilterControl.tsx
+│   │   │   │   ├── SearchControl.tsx
+│   │   │   │   └── ViewSwitcher.tsx
 │   │   │   ├── TaskBoard.tsx
 │   │   │   ├── TaskCard.tsx
 │   │   │   ├── TaskForm.tsx
@@ -89,6 +98,7 @@ AbleSpace-Task-Management/
 │   │       └── button.tsx
 │   │
 │   ├── hooks/
+│   │   ├── useGuestAuth.ts
 │   │   ├── useProfile.ts
 │   │   ├── useProjects.ts
 │   │   ├── useSettings.ts
@@ -97,6 +107,7 @@ AbleSpace-Task-Management/
 │   ├── lib/
 │   │   ├── api-config.ts
 │   │   ├── api.ts
+│   │   ├── auth.ts
 │   │   ├── profile.ts
 │   │   ├── project-api.ts
 │   │   ├── settings.ts
@@ -106,7 +117,9 @@ AbleSpace-Task-Management/
 │   │
 │   ├── public/
 │   ├── .env.example
-│   └── package.json
+│   ├── next.config.ts
+│   ├── package.json
+│   └── tsconfig.json
 │
 ├── backend/
 │   ├── src/
@@ -136,6 +149,8 @@ AbleSpace-Task-Management/
 │   ├── .env.example
 │   ├── nest-cli.json
 │   ├── package.json
+│   ├── tsconfig.build.json
 │   └── tsconfig.json
 │
+├── .gitignore
 └── README.md
