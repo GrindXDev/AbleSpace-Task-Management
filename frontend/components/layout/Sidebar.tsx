@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useGuestAuth } from "@/hooks/useGuestAuth";
+
 const navigation = [
   {
     name: "Tasks",
@@ -18,7 +20,9 @@ const navigation = [
 ];
 
 export default function Sidebar() {
+
   const pathname = usePathname();
+  const { logout } = useGuestAuth();
 
   const [showProfileMenu, setShowProfileMenu] =
     useState(false);
@@ -121,13 +125,25 @@ export default function Sidebar() {
               href="/settings"
               onClick={() => setShowProfileMenu(false)}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${pathname === "/settings"
-                  ? "bg-slate-100 text-slate-900"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                ? "bg-slate-100 text-slate-900"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 }`}
             >
               <span>⚙</span>
               <span>Settings</span>
             </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                setShowProfileMenu(false);
+                logout();
+              }}
+              className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
+            >
+              <span>↪</span>
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       )}

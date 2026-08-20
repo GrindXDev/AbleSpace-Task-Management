@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+
 import {
   Geist,
   Geist_Mono,
 } from "next/font/google";
 
+import AuthGuard from "@/components/auth/AuthGuard";
 import ThemeInitializer from "@/components/settings/ThemeInitializer";
 
 import "./globals.css";
@@ -26,7 +28,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: LayoutProps<"/">) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html
       lang="en"
@@ -35,7 +39,10 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <ThemeInitializer />
-        {children}
+
+        <AuthGuard>
+          {children}
+        </AuthGuard>
       </body>
     </html>
   );
