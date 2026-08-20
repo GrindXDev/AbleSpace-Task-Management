@@ -1,24 +1,28 @@
 "use client";
 
 interface HeaderProps {
+  title?: string;
+  subtitle?: string;
   onRefresh: () => void;
 }
 
-export default function Header({ onRefresh }: HeaderProps) {
+export default function Header({
+  title = "Tasks",
+  subtitle = "Manage your tasks",
+  onRefresh,
+}: HeaderProps) {
   return (
     <header className="flex min-h-16 items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-      {/* Page title */}
       <div>
         <h1 className="text-lg font-semibold tracking-tight text-slate-900">
-          Tasks
+          {title}
         </h1>
 
         <p className="mt-0.5 text-xs text-slate-500">
-          Manage your tasks
+          {subtitle}
         </p>
       </div>
 
-      {/* Refresh */}
       <button
         type="button"
         onClick={onRefresh}
