@@ -31,15 +31,21 @@ const columns: {
 ];
 
 const columnStyles: Record<TaskStatus, string> = {
-  todo: "bg-slate-50 border-slate-200",
-  "in-progress": "bg-blue-50/40 border-blue-100",
-  completed: "bg-emerald-50/40 border-emerald-100",
+  todo:
+    "bg-slate-50 border-slate-200 dark:bg-slate-950/40 dark:border-slate-800",
+  "in-progress":
+    "bg-blue-50/40 border-blue-100 dark:bg-blue-950/20 dark:border-blue-900/60",
+  completed:
+    "bg-emerald-50/40 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/60",
 };
 
 const countStyles: Record<TaskStatus, string> = {
-  todo: "bg-slate-200 text-slate-600",
-  "in-progress": "bg-blue-100 text-blue-700",
-  completed: "bg-emerald-100 text-emerald-700",
+  todo:
+    "bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  "in-progress":
+    "bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300",
+  completed:
+    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300",
 };
 
 export default function TaskBoard({
@@ -55,7 +61,7 @@ export default function TaskBoard({
         {[1, 2, 3].map((column) => (
           <div
             key={column}
-            className="min-h-[400px] animate-pulse rounded-2xl border border-slate-200 bg-slate-50 p-4"
+            className="min-h-[400px] animate-pulse rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950/40"
           >
             <div className="mb-5 flex items-center justify-between">
               <div className="h-5 w-24 rounded bg-slate-200" />
@@ -100,7 +106,7 @@ export default function TaskBoard({
           
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <h2 className="text-sm font-semibold text-slate-800">
+                <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
                   {column.title}
                 </h2>
 
@@ -115,7 +121,7 @@ export default function TaskBoard({
             
             <div className="space-y-3">
               {columnTasks.length === 0 ? (
-                <div className="flex min-h-28 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white/70 px-4 text-center">
+                <div className="flex min-h-28 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white/70 px-4 text-center dark:border-slate-700 dark:bg-slate-900/60">
                   <p className="text-xs font-medium text-slate-400">
                     No tasks
                   </p>

@@ -22,16 +22,22 @@ const priorityLabels: Record<TaskPriority, string> = {
   high: "High",
 };
 
-const statusStyles: Record<TaskStatus, string> = {
-  todo: "bg-slate-100 text-slate-600",
-  "in-progress": "bg-blue-50 text-blue-700",
-  completed: "bg-emerald-50 text-emerald-700",
+const priorityStyles: Record<TaskPriority, string> = {
+  low:
+    "bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100",
+  medium:
+    "bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300",
+  high:
+    "bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300",
 };
 
-const priorityStyles: Record<TaskPriority, string> = {
-  low: "bg-slate-100 text-slate-600",
-  medium: "bg-amber-50 text-amber-700",
-  high: "bg-red-50 text-red-700",
+const statusStyles: Record<TaskStatus, string> = {
+  todo:
+    "bg-zinc-100 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100",
+  "in-progress":
+    "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300",
+  completed:
+    "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300",
 };
 
 export default function TaskCard({
@@ -78,7 +84,7 @@ export default function TaskCard({
               )}
 
               {visibleFields.dueDate && task.dueDate && (
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100">
                   Due:{" "}
                   {new Date(task.dueDate).toLocaleDateString()}
                 </span>

@@ -25,7 +25,7 @@ export default function Sidebar() {
 
   return (
     <aside className="relative flex h-screen w-64 shrink-0 flex-col border-r border-slate-200 bg-white">
-      
+
       <div className="border-b border-slate-200 px-4 py-4">
         <button
           type="button"
@@ -62,9 +62,9 @@ export default function Sidebar() {
               item.href === "/"
                 ? pathname === "/"
                 : pathname === item.href ||
-                  pathname.startsWith(
-                    `${item.href}/`,
-                  );
+                pathname.startsWith(
+                  `${item.href}/`,
+                );
 
             return (
               <Link
@@ -73,11 +73,10 @@ export default function Sidebar() {
                 aria-current={
                   isActive ? "page" : undefined
                 }
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-slate-100 text-slate-900"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${isActive
+                  ? "bg-slate-100 text-slate-900"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
               >
                 <span className="flex h-5 w-5 items-center justify-center text-sm">
                   {item.icon}
@@ -90,7 +89,7 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* Profile menu */}
+
       {showProfileMenu && (
         <div className="absolute bottom-20 left-3 right-3 z-30 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
           <div className="border-b border-slate-100 px-3 py-3">
@@ -109,32 +108,31 @@ export default function Sidebar() {
               onClick={() =>
                 setShowProfileMenu(false)
               }
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                pathname === "/profile"
-                  ? "bg-slate-100 text-slate-900"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${pathname === "/profile"
+                ? "bg-slate-100 text-slate-900"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <span>♙</span>
               <span>Profile</span>
             </Link>
 
-            <button
-              type="button"
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-400"
-              disabled
+            <Link
+              href="/settings"
+              onClick={() => setShowProfileMenu(false)}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${pathname === "/settings"
+                  ? "bg-slate-100 text-slate-900"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <span>⚙</span>
               <span>Settings</span>
-              <span className="ml-auto text-xs">
-                Soon
-              </span>
-            </button>
+            </Link>
           </div>
         </div>
       )}
 
-      
+
       <div className="border-t border-slate-200 p-3">
         <button
           type="button"
@@ -144,12 +142,12 @@ export default function Sidebar() {
             )
           }
           aria-expanded={showProfileMenu}
-          className={`flex w-full items-center gap-3 rounded-lg px-2 py-2 transition ${
-            showProfileMenu ||
-            pathname === "/profile"
-              ? "bg-slate-100"
-              : "hover:bg-slate-50"
-          }`}
+          className={`flex w-full items-center gap-3 rounded-lg px-2 py-2 transition ${showProfileMenu ||
+            pathname === "/profile" ||
+            pathname === "/settings"
+            ? "bg-slate-100"
+            : "hover:bg-slate-50"
+            }`}
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
             PM
