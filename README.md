@@ -53,42 +53,86 @@ The application allows users to create, update, delete, and organize tasks using
 AbleSpace-Task-Management/
 ├── frontend/
 │   ├── app/
+│   │   ├── profile/
+│   │   │   └── page.tsx
+│   │   ├── projects/
+│   │   │   └── page.tsx
+│   │   ├── settings/
+│   │   │   └── page.tsx
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── page.tsx
+│   │
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── header.tsx
-│   │   │   └── sidebar.tsx
-│   │   ├── ui/
-│   │   │   └── button.tsx
-│   │   └── tasks/
-│   │       ├── TaskBoard.tsx
-│   │       ├── TaskCard.tsx
-│   │       ├── TaskForm.tsx
-│   │       ├── TaskList.tsx
-│   │       └── TaskToolbar.tsx
+│   │   │   ├── Header.tsx
+│   │   │   └── Sidebar.tsx
+│   │   ├── profile/
+│   │   │   ├── ProfileActions.tsx
+│   │   │   ├── ProfileFields.tsx
+│   │   │   ├── ProfilePicture.tsx
+│   │   │   └── WorkspaceAccess.tsx
+│   │   ├── projects/
+│   │   │   ├── ProjectForm.tsx
+│   │   │   ├── ProjectList.tsx
+│   │   │   └── ProjectToolbar.tsx
+│   │   ├── settings/
+│   │   │   ├── AppearanceSettings.tsx
+│   │   │   └── ThemeInitializer.tsx
+│   │   ├── tasks/
+│   │   │   ├── TaskBoard.tsx
+│   │   │   ├── TaskCard.tsx
+│   │   │   ├── TaskForm.tsx
+│   │   │   ├── TaskList.tsx
+│   │   │   └── TaskToolbar.tsx
+│   │   └── ui/
+│   │       └── button.tsx
+│   │
 │   ├── hooks/
-│   │   └── useTasks.tsx
+│   │   ├── useProfile.ts
+│   │   ├── useProjects.ts
+│   │   ├── useSettings.ts
+│   │   └── useTasks.ts
+│   │
 │   ├── lib/
+│   │   ├── api-config.ts
 │   │   ├── api.ts
+│   │   ├── profile.ts
+│   │   ├── project-api.ts
+│   │   ├── settings.ts
+│   │   ├── task-api.ts
+│   │   ├── task-fields.ts
 │   │   └── utils.ts
+│   │
 │   ├── public/
 │   ├── .env.example
 │   └── package.json
 │
 ├── backend/
 │   ├── src/
+│   │   ├── project/
+│   │   │   ├── dto/
+│   │   │   │   ├── create-project.dto.ts
+│   │   │   │   └── update-project.dto.ts
+│   │   │   ├── schemas/
+│   │   │   │   └── project.schema.ts
+│   │   │   ├── project.controller.ts
+│   │   │   ├── project.module.ts
+│   │   │   └── project.service.ts
+│   │   │
 │   │   ├── task/
 │   │   │   ├── dto/
+│   │   │   │   ├── create-task.dto.ts
+│   │   │   │   └── update-task.dto.ts
 │   │   │   ├── schemas/
+│   │   │   │   └── task.schema.ts
 │   │   │   ├── task.controller.ts
 │   │   │   ├── task.module.ts
 │   │   │   └── task.service.ts
-│   │   ├── app.controller.ts
+│   │   │
 │   │   ├── app.module.ts
-│   │   ├── app.service.ts
 │   │   └── main.ts
+│   │
 │   ├── .env.example
 │   ├── nest-cli.json
 │   ├── package.json
