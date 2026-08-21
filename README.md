@@ -1,3 +1,10 @@
+## Live Deployment
+
+- **Frontend:** https://able-space-task-management-nine.vercel.app
+- **Backend API:** https://ablespace-task-management-gphx.onrender.com
+- **Tasks Endpoint:** https://ablespace-task-management-gphx.onrender.com/tasks
+
+
 # Task Management System
 
 A full-stack task management application built as part of the AbleSpace Full Stack Developer technical assessment.
