@@ -12,6 +12,11 @@ export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
+  userId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   title: string;
 
   @IsOptional()

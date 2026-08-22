@@ -17,6 +17,9 @@ export enum TaskPriority {
 
 @Schema({ timestamps: true })
 export class Task {
+  @Prop({ required: true, trim: true, index: true })
+  userId: string;
+
   @Prop({ required: true, trim: true })
   title: string;
 

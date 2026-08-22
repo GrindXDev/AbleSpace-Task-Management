@@ -11,6 +11,22 @@ import {
   TaskStatus,
 } from "@/lib/api";
 
+const GUEST_USER_ID_KEY = "ablespace-guest-user-id";
+
+function getOrCreateGuestUserId(): string {
+  const existingUserId = localStorage.getItem(GUEST_USER_ID_KEY);
+
+  if (existingUserId) {
+    return existingUserId;
+  }
+
+  const newUserId = crypto.randomUUID();
+
+  localStorage.setItem(GUEST_USER_ID_KEY, newUserId);
+
+  return newUserId;
+}
+
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +37,10 @@ export function useTasks() {
       setLoading(true);
       setError("");
 
-      const data = await getTasks();
+      const userId = getOrCreateGuestUserId();
+
+      const data = await getTasks(userId);
+
       setTasks(data);
     } catch {
       setError("Unable to load tasks.");
@@ -44,13 +63,19 @@ export function useTasks() {
     try {
       setError("");
 
-      const newTask = await apiCreateTask(data);
+      const userId = getOrCreateGuestUserId();
+
+      const newTask = await apiCreateTask({
+        ...data,
+        userId,
+      });
 
       setTasks((currentTasks) => [newTask, ...currentTasks]);
 
       return newTask;
     } catch {
       setError("Unable to create task.");
+
       throw new Error("Unable to create task.");
     }
   }
@@ -68,7 +93,9 @@ export function useTasks() {
     try {
       setError("");
 
-      const updatedTask = await apiUpdateTask(id, data);
+      const userId = getOrCreateGuestUserId();
+
+      const updatedTask = await apiUpdateTask(id, data, userId);
 
       setTasks((currentTasks) =>
         currentTasks.map((task) =>
@@ -79,6 +106,7 @@ export function useTasks() {
       return updatedTask;
     } catch {
       setError("Unable to update task.");
+
       throw new Error("Unable to update task.");
     }
   }
@@ -87,13 +115,16 @@ export function useTasks() {
     try {
       setError("");
 
-      await apiDeleteTask(id);
+      const userId = getOrCreateGuestUserId();
+
+      await apiDeleteTask(id, userId);
 
       setTasks((currentTasks) =>
         currentTasks.filter((task) => task._id !== id),
       );
     } catch {
       setError("Unable to delete task.");
+
       throw new Error("Unable to delete task.");
     }
   }
