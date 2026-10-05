@@ -161,11 +161,3 @@ AbleSpace-Task-Management/
 │
 ├── .gitignore
 └── README.md
-
-
-
-## Part 2: Product Understanding
-
-Explore the AbleSpace Take Data workflow, screenshots, and suggested UX/UI and functionality improvements:
-
-[Read the Part 2 Product Understanding document](./PART-2-PRODUCT-UNDERSTANDING.md)
